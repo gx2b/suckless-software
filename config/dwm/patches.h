@@ -177,13 +177,6 @@
  */
 #define EWMHTAGS_PATCH 1
 
-/* This patch makes dialog, utility, toolbar, splash and modal windows float by default.
- * This may only be a temporary patch depending on whether this is integrated in the main
- * dwm source, and if so how.
- * https://lists.suckless.org/hackers/2005/17318.html
- */
-#define EWMH_WINDOWS_FLOAT_PATCH 1
-
 /* This patch allows the user to change size and placement of floating windows using only the
  * keyboard. It also allows for temporary vertical and horizontal extension of windows similar
  * to other WMs fill command.
@@ -249,7 +242,7 @@
  * the urgency bit on the named window. This patch activates the window instead.
  * https://dwm.suckless.org/patches/focusonnetactive/
  */
-#define FOCUSONNETACTIVE_PATCH 0
+#define FOCUSONNETACTIVE_PATCH 1
 
 /* Send "fake signals" to dwm for handling, using xsetroot. This will not conflict with the
  * status bar, which also is managed using xsetroot.
@@ -390,6 +383,27 @@
  */
 #define ONLYQUITONEMPTY_PATCH 0
 
+/* This patch adds simple markup for status messages using pango markup.
+ * This depends on the pango library v1.44 or greater.
+ * You need to uncomment the corresponding lines in config.mk to use the pango libraries
+ * when including this patch.
+ *
+ * Note that the pango patch does not protect against the BadLength error from Xft
+ * when color glyphs are used, which means that dwm will crash if color emoji is used.
+ *
+ * If you need color emoji then you may want to install this patched library from the AUR:
+ * https://aur.archlinux.org/packages/libxft-bgra/
+ *
+ * A long term fix for the libXft library is pending approval of this pull request:
+ * https://gitlab.freedesktop.org/xorg/lib/libxft/-/merge_requests/1
+ *
+ * Also see:
+ * https://developer.gnome.org/pygtk/stable/pango-markup-language.html
+ * https://lists.suckless.org/hackers/2004/17285.html
+ * https://dwm.suckless.org/patches/pango/
+ */
+#define PANGO_PATCH 0
+
 /* The pertag patch adds nmaster, mfacts and layouts per tag rather than per
  * monitor (default).
  * https://dwm.suckless.org/patches/pertag/
@@ -445,13 +459,13 @@
  */
 #define SAVEFLOATS_PATCH 0
 
-/* The scratchpad patch allows you to spawn or restore floating terminal windows.
+/* The scratchpads patch allows you to spawn or restore floating terminal windows.
  * It is typically useful when one need to do some short typing.
  * Upgraded to Christian Tenllado's multiple scratchpad version.
  * https://lists.suckless.org/hackers/2004/17205.html
- * https://dwm.suckless.org/patches/scratchpad/
+ * https://dwm.suckless.org/patches/scratchpads/
  */
-#define SCRATCHPAD_PATCH 1
+#define SCRATCHPADS_PATCH 1
 
 /* The scratchpad patch above automatically resizes and centers the scratchpad window every
  * time you spawn it. This alteration of the patch disables that so that the size and position
@@ -484,7 +498,7 @@
 /* This variant of the shiftview patch adds left and right circular shift through tags,
  * but skips tags where there are no clients.
  */
-#define SHIFTVIEW_CLIENTS_PATCH 0
+#define SHIFTVIEW_CLIENTS_PATCH 1
 
 /* In a multi-head setup monitor 0 is by default the primary screen, with the left and right
  * screen being monitor 1 and 2 respectively. This patch sorts screens left to right (or
@@ -497,7 +511,7 @@
 /* Spawns programs from currently focused client's working directory.
  * https://dwm.suckless.org/patches/spawn_cwd/
  */
-#define SPAWNCMD_PATCH 1
+#define SPAWNCMD_PATCH 0
 
 /* This patch provides comprehensive utilities for managing the client stack, providing
  * keyboard shortcuts for focusing or placing a client at specific positions in the stack.
@@ -508,6 +522,15 @@
  * https://dwm.suckless.org/patches/stacker/
  */
 #define STACKER_PATCH 0
+
+/* This patch allows the status text to be fixed to the bar on a specific
+ * monitor rather than being drawn on the focused monitor.
+ * The statusallmons patch takes precedence over this patch.
+ * NB: If used together with the systray patch then consider setting
+ * systraypinning to statmonval+1.
+ * https://dwm.suckless.org/patches/staticstatus/
+ */
+#define STATICSTATUS_PATCH 0
 
 /* Status2d allows colors and rectangle drawing in the dwm status bar.
  * This patch is incompatible with the statuscolors patch which takes precedence.
@@ -639,7 +662,7 @@
  * while remaining in fullscreen.
  * https://github.com/bakkeby/patches/tree/master/dwm/dwm-tagmonfixfs-6.2.diff
  */
-#define TAGMONFIXFS_PATCH 0
+#define TAGMONFIXFS_PATCH 1
 
 /* This patch allows you to swap all visible windows on one monitor with those of an
  * adjacent monitor.

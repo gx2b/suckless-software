@@ -51,20 +51,60 @@ static Sp scratchpads[] = {
 /* tagging */
 static char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
+/* There are two options when it comes to per-client rules:
+ *  - a typical struct table or
+ *  - using the RULE macro
+ *
+ * A traditional struct table looks like this:
+ *    // class      instance  title  wintype  tags mask  isfloating  monitor
+ *    { "Gimp",     NULL,     NULL,  NULL,    1 << 4,    0,          -1 },
+ *    { "Firefox",  NULL,     NULL,  NULL,    1 << 7,    0,          -1 },
+ *
+ * The RULE macro has the default values set for each field allowing you to only
+ * specify the values that are relevant for your rule, e.g.
+ *
+ *    RULE(.class = "Gimp", .tags = 1 << 4)
+ *    RULE(.class = "Firefox", .tags = 1 << 7)
+ *
+ * Refer to the Rule struct definition for the list of available fields depending on
+ * the patches you enable.
+ */
+
+/*
+static const Rule rules[] = {
+	// xprop(1):
+	//	WM_CLASS(STRING) = instance, class
+	// 	WM_NAME(STRING) = title
+	// 	WM_WINDOW_ROLE(STRING) = role
+	// 	_NET_WM_WINDOW_TYPE(ATOM) = wintype
+	//
+	RULE(.wintype = WTYPE "DIALOG", .isfloating = 1)
+	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
+	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
+	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
+	RULE(.class = "Gimp", .tags = 1 << 4 )
+	RULE(.class = "firefox", .tags = 1 << 7)
+	RULE(.class = "st", .noswallow = 1, .isterminal = 1)
+	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
+	RULE(.instance = "spfm", .tags = SPTAG(1), .isfloating = 1)
+	RULE(.instance = "spcalc", .tags = SPTAG(2), .isfloating = 1)
+};
+*/
 
 static const Rule rules[] = {
-    /* xprop(1):
-     *    WM_CLASS(STRING) = instance, class
-     *    WM_NAME(STRING) = title
-     *    WM_WINDOW_ROLE(STRING) = role
-     */
-    /* class      role        instance    title   tags mask    isfloating   isterminal  noswallow  monitor */
-    { "Gimp",     NULL,       NULL,       NULL,   0,           1,           0,          0,         -1 },
-    { "Firefox",  NULL,       NULL,       NULL,   1 << 8,      0,           0,          0,         -1 },
-    { "St",       NULL,       NULL,       NULL,   0,           0,           1,          0,         -1 },
-    { NULL,       NULL,       "spterm",   NULL,   SPTAG(0),    1,           1,          0,         -1 },
-    { NULL,       NULL,       "spfm",     NULL,   SPTAG(1),    1,           1,          0,         -1 },
-    { NULL,       NULL,       "spcalc",   NULL,   SPTAG(2),    1,           1,          0,         -1 },
+    // xprop(1):
+    //    WM_CLASS(STRING) = instance, class
+    //    WM_NAME(STRING) = title
+    //    WM_WINDOW_ROLE(STRING) = role
+    //
+    // class      role      instance    title      wtype  tags mask    isfloating   isterminal  noswallow  monitor
+    { "Gimp",     NULL,     NULL,       NULL,      NULL,   0,           1,           0,          0,         -1 },
+    { "Firefox",  NULL,     NULL,       NULL,      NULL,   1 << 8,      0,           0,          0,         -1 },
+    { "St",       NULL,     NULL,       NULL,      NULL,   0,           0,           1,          0,         -1 },
+    { NULL,       NULL,     NULL,  "Event Tester", NULL,   0,           0,           0,          1,         -1 },   // xev
+    { NULL,       NULL,     "spterm",   NULL,      NULL,   SPTAG(0),    1,           1,          0,         -1 },
+    { NULL,       NULL,     "spfm",     NULL,      NULL,   SPTAG(1),    1,           1,          0,         -1 },
+    { NULL,       NULL,     "spcalc",   NULL,      NULL,   SPTAG(2),    1,           1,          0,         -1 },
 };
 
 static const MonitorRule monrules[] = {
@@ -101,11 +141,13 @@ static Signal signals[] = {
 	{ "incrovgaps",              incrovgaps },
 	{ "togglegaps",              togglegaps },
 	{ "defaultgaps",             defaultgaps },
+	{ "setgaps",                 setgapsex },
 	{ "view",                    view },
 	{ "viewall",                 viewallex },
 	{ "viewex",                  viewex },
 	{ "toggleview",              view },
 	{ "shiftview",               shiftview },
+	{ "shiftviewclients",        shiftviewclients },
 	{ "togglesticky",            togglesticky },
 //	{ "setborderpx",             setborderpx },
 	{ "cyclelayout",             cyclelayout },
@@ -183,6 +225,7 @@ static const char *dmenucmd[] = {
     NULL
 };
 static const char *termcmd[]  = { "st", NULL };
+static const char *instantswitchcmd[] = {"rofi", "-show", "window", "-show-icons", "-kb-row-down", "Alt+Tab,Down", "-kb-row-up", "Alt+Ctrl+Tab,Up", "-kb-accept-entry", "!Alt_L,!Alt+Tab,Return", "-me-select-entry", "", "-me-accept-entry", "MousePrimary", NULL};
 
 #include <X11/XF86keysym.h>
 static Key keys[] = {
@@ -196,6 +239,7 @@ static Key keys[] = {
     TAGKEYS(                        XK_7,                                  6)
     TAGKEYS(                        XK_8,                                  7)
     TAGKEYS(                        XK_9,                                  8)
+    { Mod1Mask,                     XK_Tab,        spawn,                  {.v = instantswitchcmd } },
     { MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
 
@@ -211,12 +255,18 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_BackSpace,  spawn,                  SHCMD("sysact") },
     { MODKEY,                       XK_Insert,     spawn,                  SHCMD("showclip") },
     { ShiftMask,                    XK_Print,      spawn,                  SHCMD("maimpick") },
-    { MODKEY,                       XK_Page_Up,    shiftview,              {.i = -1 } },
-    { MODKEY,                       XK_Page_Down,  shiftview,              {.i =  1 } },
-    { MODKEY,                       XK_minus,      spawn,                  SHCMD("amixer sset Master 5%- ; pkill -RTMIN+10 dwmblocks") },
-    { MODKEY|ShiftMask,             XK_minus,      spawn,                  SHCMD("amixer sset Master 15%- ; pkill -RTMIN+10 dwmblocks") },
-    { MODKEY,                       XK_equal,      spawn,                  SHCMD("amixer sset Master 5%+ ; pkill -RTMIN+10 dwmblocks") },
-    { MODKEY|ShiftMask,             XK_equal,      spawn,                  SHCMD("amixer sset Master 15%+ ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY,                       XK_Page_Up,    shiftviewclients,       {.i =  1 } },
+    { MODKEY,                       XK_Page_Down,  shiftviewclients,       {.i = -1 } },
+    { MODKEY|ShiftMask,             XK_Page_Up,    shiftview,              {.i =  1 } },
+    { MODKEY|ShiftMask,             XK_Page_Down,  shiftview,              {.i = -1 } },
+    //{ MODKEY,                       XK_minus,      spawn,                  SHCMD("pamixer --allow-boost -d 5 ; pkill -RTMIN+10 dwmblocks") },
+    //{ MODKEY|ShiftMask,             XK_minus,      spawn,                  SHCMD("pamixer --allow-boost -d 1 ; pkill -RTMIN+10 dwmblocks") },
+    //{ MODKEY,                       XK_equal,      spawn,                  SHCMD("pamixer --allow-boost -i 5 ; pkill -RTMIN+10 dwmblocks") },
+    //{ MODKEY|ShiftMask,             XK_equal,      spawn,                  SHCMD("pamixer --allow-boost -i 1 ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY,                       XK_minus,      spawn,                  SHCMD("pulsemixer --change-volume -5 ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY|ShiftMask,             XK_minus,      spawn,                  SHCMD("pulsemixer --change-volume -1 ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY,                       XK_equal,      spawn,                  SHCMD("pulsemixer --change-volume +5 ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY|ShiftMask,             XK_equal,      spawn,                  SHCMD("pulsemixer --change-volume +1 ; pkill -RTMIN+10 dwmblocks") },
 
     { MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
     { MODKEY|ShiftMask,             XK_Return,     togglescratch,          {.ui = 0 } },
@@ -230,12 +280,17 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_space,      togglefloating,         {0} },
     { MODKEY|ControlMask,           XK_space,      setlayout,              {0} },
 
-    { MODKEY,                       XK_backslash,  focusmon,               {.i = +1 } },
+    { MODKEY,                       XK_backslash,  focusmon,               {.i = +1 } },  // TODO
     { MODKEY,                       XK_apostrophe, tagswapmon,             {.i = +1 } },
-    { MODKEY,                       XK_semicolon,  tagmon,                 {.i = +1 } },
+    { MODKEY,                       XK_semicolon,  tagmon,                 {.i = +1 } },  // TODO
     { MODKEY|ShiftMask,             XK_apostrophe, tagallmon,              {.i = +1 } },
 
-    { MODKEY|ShiftMask,             XK_a,          spawn,                  SHCMD("st -e alsamixer ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY,                       XK_Left,       focusmon,               {.i = -1 } },
+    { MODKEY|ShiftMask,             XK_Left,       tagmon,                 {.i = -1 } },
+    { MODKEY,                       XK_Right,      focusmon,               {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_Right,      tagmon,                 {.i = +1 } },
+
+    { MODKEY|ShiftMask,             XK_a,          spawn,                  SHCMD("st -e pulsemixer ; pkill -RTMIN+10 dwmblocks") },
     { MODKEY,                       XK_b,          togglebar,              {0} },
     { MODKEY,                       XK_c,          spawn,                  SHCMD("gpass") },
     { MODKEY|ShiftMask,             XK_c,          togglescratch,          {.ui = 2 } },
@@ -250,6 +305,8 @@ static Key keys[] = {
     { MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
     { MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
     { MODKEY,                       XK_l,          setmfact,               {.f = -0.05} },
+    //{ MODKEY,                       XK_m,          spawn,                  SHCMD("pamixer -t; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY,                       XK_m,          spawn,                  SHCMD("pulsemixer --toggle-mute ; pkill -RTMIN+10 dwmblocks") },
     { MODKEY|ShiftMask,             XK_m,          spawn,                  SHCMD("st -e ncmpcpp") },
     { MODKEY,                       XK_o,          winview,                {0} },
     { MODKEY,                       XK_p,          spawn,                  SHCMD("mpc toggle; pkill -RTMIN+11 dwmblocks") },
@@ -261,18 +318,14 @@ static Key keys[] = {
     { MODKEY,                       XK_w,          spawn,                  SHCMD("$BROWSER") },
     { MODKEY|ShiftMask,             XK_w,          spawn,                  SHCMD("chromium --force-device-scale-factor=2 --disable-field-trial-config") },
     { MODKEY,                       XK_x,          spawn,                  SHCMD("slock & mpc pause ; pauseallmpv") },
+    { MODKEY,                       XK_a,          spawn,                  SHCMD("instant") },
     { MODKEY,                       XK_z,          incrgaps,               {.i = +1 } },
     { MODKEY|ShiftMask,             XK_z,          incrgaps,               {.i = -1 } },
 
+    // TODO
     { MODKEY,                       XK_q,          setlayout,              {.v = &layouts[0]} },
-    { MODKEY,                       XK_a,          setlayout,              {.v = &layouts[1]} },
+    //{ MODKEY,                       XK_a,          setlayout,              {.v = &layouts[1]} },
     { MODKEY,                       XK_y,          setlayout,              {.v = &layouts[2]} },
-
-    //------- not important keys...  --> remove ?
-    { MODKEY|Mod1Mask|ShiftMask,    XK_j,          inplacerotate,          {.i = +1} },
-    { MODKEY|Mod1Mask|ShiftMask,    XK_k,          inplacerotate,          {.i = -1} },
-    { MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
-    { MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
 
     // resize/move floating window
     { MODKEY|Mod1Mask,              XK_Down,       moveresize,             {.v = "0x 25y 0w 0h" } },
@@ -284,9 +337,11 @@ static Key keys[] = {
     { MODKEY|Mod1Mask|ShiftMask,    XK_Right,      moveresize,             {.v = "0x 0y 25w 0h" } },
     { MODKEY|Mod1Mask|ShiftMask,    XK_Left,       moveresize,             {.v = "0x 0y -25w 0h" } },
 
-    // ?????
-    { MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
-    { MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
+    //------- not important keys...  --> remove ?
+    { MODKEY|Mod1Mask|ShiftMask,    XK_j,          inplacerotate,          {.i = +1} },
+    { MODKEY|Mod1Mask|ShiftMask,    XK_k,          inplacerotate,          {.i = -1} },
+    { MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
+    { MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
 
     // rotate axis
     { MODKEY|ControlMask,           XK_t,          rotatelayoutaxis,       {.i = +1 } },   /* flextile, 1 = layout axis */
