@@ -82,7 +82,7 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
-	RULE(.class = "Gimp", .tags = 1 << 4 )
+	RULE(.class = "Gimp", .tags = 1 << 4)
 	RULE(.class = "firefox", .tags = 1 << 7)
 	RULE(.class = "st", .noswallow = 1, .isterminal = 1)
 	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)

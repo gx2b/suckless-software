@@ -1,0 +1,23 @@
+diff -Ncr /tmp/suckless-build.RVegr5K/p1/slock/config.h /tmp/suckless-build.RVegr5K/p2/slock/config.h
+*** /tmp/suckless-build.RVegr5K/p1/slock/config.h	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build.RVegr5K/p2/slock/config.h	2020-05-31 22:41:55.000000000 +0200
+***************
+*** 0 ****
+--- 1,17 ----
++ /* user and group to drop privileges to */
++ static const char *user  = "nobody";
++ static const char *group = "nobody";
++ 
++ static const char *colorname[NUMCOLS] = {
++ 	[INIT] =   "black",     /* after initialization */
++ 	[INPUT] =  "#005577",   /* during input */
++ 	[FAILED] = "#AA33AA",   /* wrong password */
++ 	[CAPS] =   "red",   /* CapsLock on */
++ };
++ 
++ 
++ /* treat a cleared input like a wrong password (color) */
++ static const int failonclear = 1;
++ 
++ /* allow control key to trigger fail on clear */
++ static const int controlkeyclear = 1;
