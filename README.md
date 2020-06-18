@@ -3,21 +3,28 @@ Automates patching and building of:
   - dwm
   - dmenu
   - slock
-  - st (not yet)
+  - st
   - dwmblocks (not yet)
 
-See also: (https://suckless.org)
- 
-Patching is done via the "flexipatch" system from https://github.com/bakkeby
+## Build
+ - https://github.com/gx2b/dwm
+ - https://github.com/gx2b/dmenu
+ - https://github.com/gx2b/slock
+ - https://github.com/gx2b/st
+
 
 ## Howto
 
-1. Clone all repositories: git clone --recursive https://github.com/gx2b/suckless-software-builder.git
-2. Copy the patches from config/{dwm,slock,st,dmenu}/patches.h into the corresponding repositories
-3. Apply flexipatch-finalizer.sh
-4. Copy the remaining files from the config directory into the created build
-5. make
-6. sudo make install
+1. git clone --recursive https://github.com/gx2b/suckless-software-builder.git
+2. Select the desired patches: config/{dwm,slock,st,dmenu}/p1/patches.h 
+3. Add configuration (config.h etc.) to config/{dwm,slock,st,dmenu}/p2
+4. run ./mkpatch.sh
+5. check output in the patch/ directory
+5. run ./mkbuild.sh [ -i ]
+6. check the final build
 
 
-
+## Links
+- Patching is done via the "flexipatch" system from https://github.com/bakkeby
+- Suckless Software: https://suckless.org
+- Luke's build: https://github.com/lukesmithxyz
