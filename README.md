@@ -1,19 +1,23 @@
-# suckless-software
-My builds of suckless software (https://suckless.org)
+# suckless-software-builder
+Automates patching and building of:
   - dwm
   - dmenu
   - slock
   - st (not yet)
   - dwmblocks (not yet)
 
+See also: (https://suckless.org)
+ 
 Patching is done via the "flexipatch" system from https://github.com/bakkeby
 
-## Installation
+## Howto
 
-Clone this repository with something like:
+1. Clone all repositories: git clone --recursive https://github.com/gx2b/suckless-software.git
+2. Copy the patches from config/{dwm,slock,st,dmenu}/patches.h into the corresponding repositories
+3. Apply flexipatch-finalizer.sh
+4. Copy the remaining files from the config directory into the created build
+5. make
+6. sudo make install
 
-git clone --recursive https://github.com/gx2b/suckless-software.git
 
 
-You can find the selected patches and my config.h in the config directory.
-There is a very simple build.sh script which builds everything and does the installation (this should be probably replaced with a proper Makefile).
