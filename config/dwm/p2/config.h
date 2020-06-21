@@ -167,6 +167,8 @@ static Signal signals[] = {
 	{ "quit",                    quit },
 	{ "setlayout",               setlayout },
 	{ "setlayoutex",             setlayoutex },
+	{ "tagnextmonex",            tagnextmonex },
+	{ "tagprevmonex",            tagprevmonex },
 };
 
 /* layout(s) */
@@ -204,7 +206,10 @@ static const Layout layouts[] = {
     { MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
     { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
     { MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
+	{ MODKEY|Mod1Mask,                     KEY,      tagnextmon,     {.ui = 1 << TAG} }, \
+	{ MODKEY|Mod1Mask|ShiftMask,           KEY,      tagprevmon,     {.ui = 1 << TAG} },
+
 
 
 
@@ -259,22 +264,18 @@ static Key keys[] = {
     { MODKEY,                       XK_Page_Down,  shiftviewclients,       {.i = -1 } },
     { MODKEY|ShiftMask,             XK_Page_Up,    shiftview,              {.i =  1 } },
     { MODKEY|ShiftMask,             XK_Page_Down,  shiftview,              {.i = -1 } },
-    //{ MODKEY,                       XK_minus,      spawn,                  SHCMD("pamixer --allow-boost -d 5 ; pkill -RTMIN+10 dwmblocks") },
-    //{ MODKEY|ShiftMask,             XK_minus,      spawn,                  SHCMD("pamixer --allow-boost -d 1 ; pkill -RTMIN+10 dwmblocks") },
-    //{ MODKEY,                       XK_equal,      spawn,                  SHCMD("pamixer --allow-boost -i 5 ; pkill -RTMIN+10 dwmblocks") },
-    //{ MODKEY|ShiftMask,             XK_equal,      spawn,                  SHCMD("pamixer --allow-boost -i 1 ; pkill -RTMIN+10 dwmblocks") },
-    { MODKEY,                       XK_minus,      spawn,                  SHCMD("pulsemixer --change-volume -5 ; pkill -RTMIN+10 dwmblocks") },
-    { MODKEY|ShiftMask,             XK_minus,      spawn,                  SHCMD("pulsemixer --change-volume -1 ; pkill -RTMIN+10 dwmblocks") },
-    { MODKEY,                       XK_equal,      spawn,                  SHCMD("pulsemixer --change-volume +5 ; pkill -RTMIN+10 dwmblocks") },
-    { MODKEY|ShiftMask,             XK_equal,      spawn,                  SHCMD("pulsemixer --change-volume +1 ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY,                       XK_minus,      spawn,                  SHCMD("pulsemixer --change-volume -5 ; kill -44 $(pidof dwmblocks)") },
+    { MODKEY|ShiftMask,             XK_minus,      spawn,                  SHCMD("pulsemixer --change-volume -1 ; kill -44 $(pidof dwmblocks)") },
+    { MODKEY,                       XK_equal,      spawn,                  SHCMD("pulsemixer --change-volume +5 ; kill -44 $(pidof dwmblocks)") },
+    { MODKEY|ShiftMask,             XK_equal,      spawn,                  SHCMD("pulsemixer --change-volume +1 ; kill -44 $(pidof dwmblocks)") },
 
     { MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
     { MODKEY|ShiftMask,             XK_Return,     togglescratch,          {.ui = 0 } },
     { MODKEY|ControlMask,           XK_Return,     togglescratch,          {.ui = 1 } },
-    { MODKEY,                       XK_comma,      spawn,                  SHCMD("mpc prev ; pkill -RTMIN+11 dwmblocks") },
-    { MODKEY|ShiftMask,             XK_comma,      spawn,                  SHCMD("mpc seek 0% ; pkill -RTMIN+11 dwmblocks") },
+    { MODKEY,                       XK_comma,      spawn,                  SHCMD("mpc prev ; kill -45 $(pidof dwmblocks)") },
+    { MODKEY|ShiftMask,             XK_comma,      spawn,                  SHCMD("mpc seek 0% ; kill -45 $(pidof dwmblocks)") },
     { MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
-    { MODKEY,                       XK_period,     spawn,                  SHCMD("mpc next ; pkill -RTMIN+11 dwmblocks") },
+    { MODKEY,                       XK_period,     spawn,                  SHCMD("mpc next ; kill -45 $(pidof dwmblocks)") },
     { MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
     { MODKEY,                       XK_space,      zoom,                   {0} },
     { MODKEY|ShiftMask,             XK_space,      togglefloating,         {0} },
@@ -290,7 +291,7 @@ static Key keys[] = {
     { MODKEY,                       XK_Right,      focusmon,               {.i = +1 } },
     { MODKEY|ShiftMask,             XK_Right,      tagmon,                 {.i = +1 } },
 
-    { MODKEY|ShiftMask,             XK_a,          spawn,                  SHCMD("st -e pulsemixer ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY|ShiftMask,             XK_a,          spawn,                  SHCMD("st -e pulsemixer ; kill -44 $(pidof dwmblocks)") },
     { MODKEY,                       XK_b,          togglebar,              {0} },
     { MODKEY,                       XK_c,          spawn,                  SHCMD("gpass") },
     { MODKEY|ShiftMask,             XK_c,          togglescratch,          {.ui = 2 } },
@@ -306,10 +307,10 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
     { MODKEY,                       XK_l,          setmfact,               {.f = -0.05} },
     //{ MODKEY,                       XK_m,          spawn,                  SHCMD("pamixer -t; pkill -RTMIN+10 dwmblocks") },
-    { MODKEY,                       XK_m,          spawn,                  SHCMD("pulsemixer --toggle-mute ; pkill -RTMIN+10 dwmblocks") },
+    { MODKEY,                       XK_m,          spawn,                  SHCMD("pulsemixer --toggle-mute ; kill -44 $(pidof dwmblocks)") },
     { MODKEY|ShiftMask,             XK_m,          spawn,                  SHCMD("st -e ncmpcpp") },
     { MODKEY,                       XK_o,          winview,                {0} },
-    { MODKEY,                       XK_p,          spawn,                  SHCMD("mpc toggle; pkill -RTMIN+11 dwmblocks") },
+    { MODKEY,                       XK_p,          spawn,                  SHCMD("mpc toggle; kill -45 $(pidof dwmblocks)") },
     { MODKEY|ShiftMask,             XK_p,          spawn,                  SHCMD("mpc pause ; pauseallmpv") },
     { MODKEY|ShiftMask,             XK_q,          killclient,             {0} },
     { MODKEY|ShiftMask,             XK_r,          mirrorlayout,           {0} },         /* flextile, flip master and stack areas */
@@ -373,7 +374,7 @@ static Key keys[] = {
     { 0, XF86XK_DOS,                 spawn,        SHCMD("st") },
     { 0, XF86XK_ScreenSaver,         spawn,        SHCMD("slock & xset dpms force off; mpc pause; pauseallmpv") },
     { 0, XF86XK_TaskPane,            spawn,        SHCMD("st -e htop") },
-    { 0, XF86XK_Mail,                spawn,        SHCMD("st -e neomutt ; pkill -RTMIN+12 dwmblocks") },
+    { 0, XF86XK_Mail,                spawn,        SHCMD("st -e neomutt") },
     { 0, XF86XK_MyComputer,          spawn,        SHCMD("st -e lf /") },
     { 0, XF86XK_Battery,             spawn,        SHCMD("") },
     { 0, XF86XK_Launch1,             spawn,        SHCMD("xset dpms force off") },
@@ -422,6 +423,8 @@ static Button buttons[] = {
     { ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },
     { ClkClientWin,         MODKEY,              Button4,        incrgaps,       {.i = +1} },
     { ClkClientWin,         MODKEY,              Button5,        incrgaps,       {.i = -1} },
+    { ClkClientWin,         MODKEY|Mod1Mask,     Button1,        tagmon,         {.i = +1} },
+//    { ClkClientWin,         MODKEY,              Button7,        tagmon,         {.i = -1} },
 
     { ClkTagBar,            0,                   Button1,        view,           {0} },
     { ClkTagBar,            0,                   Button3,        toggleview,     {0} },
