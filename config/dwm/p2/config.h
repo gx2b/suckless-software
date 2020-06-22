@@ -10,6 +10,7 @@ static const unsigned int gappov         = 6;  /* vert outer gap between windows
 static const int smartgaps               = 0;   /* 1 means no outer gap when there is only one window */
 static const int showbar                 = 1;   /* 0 means no bar */
 static const int topbar                  = 1;   /* 0 means bottom bar */
+static const char buttonbar[]            = "📪";
 static const int vertpad                 = 4;  /* vertical padding of bar */
 static const int sidepad                 = 16;  /* horizontal padding of bar */
 static const int horizpadbar             = 2;   /* horizontal padding for statusbar */
@@ -109,8 +110,29 @@ static const Rule rules[] = {
 
 static const MonitorRule monrules[] = {
     /* monitor  tag   layout  mfact  nmaster  showbar  topbar */
-    {  1,       -1,   0,      -1,    -1,      -1,      -1     }, // use a different layout for the second monitor
-    {  -1,      -1,   0,      -1,    -1,      -1,      -1     }, // default
+//    {  -1,      -1,   0,      -1,    -1,      -1,      -1     }, // default
+//    {   1,      -1,   0,      -1,    -1,      -1,      -1     }, // use a different layout for the second monitor
+    {   0,       1,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#1 : default
+    {   0,       2,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#2 : default
+    {   0,       3,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#3 : default
+    {   0,       4,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#4 : default
+    {   0,       5,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#5 : default
+    {   0,       6,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#6 : default
+    {   0,       7,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#7 : default
+    {   0,       8,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#8 : default
+    {   0,       9,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#9 : default
+    {   0,       0,   9,      -1,    -1,      -1,      -1     }, // mon#0 tag#0 : grid layout (#9) - nice for winview
+
+    {   1,       1,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#1 : default
+    {   1,       2,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#2 : default
+    {   1,       3,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#3 : default
+    {   1,       4,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#4 : default
+    {   1,       5,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#5 : default
+    {   1,       6,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#6 : default
+    {   1,       7,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#7 : default
+    {   1,       8,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#8 : default
+    {   1,       9,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#9 : default
+    {   1,       0,   9,      -1,    -1,      -1,      -1     }, // mon#1 tag#0 : grid layout (#9) - nice for winview
 };
 
 /* signal definitions */
@@ -406,6 +428,10 @@ static Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
     /* click                event mask           button          function        argument */
+	{ ClkButton,		0,		Button1,	spawn,		SHCMD("dmenuunicode") },
+	{ ClkButton,		0,		Button2,	spawn,		{.v = dmenucmd } },
+	{ ClkButton,		0,		Button3,	spawn,		{.v = dmenucmd } },
+
     { ClkWinTitle,          0,                   Button2,        zoom,           {0} },
 
     { ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
