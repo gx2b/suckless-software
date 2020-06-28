@@ -1,6 +1,6 @@
-diff -Ncr /tmp/suckless-build1.WjXxvas/p1/slock/config.h /tmp/suckless-build1.WjXxvas/p2/slock/config.h
-*** /tmp/suckless-build1.WjXxvas/p1/slock/config.h	1970-01-01 01:00:00.000000000 +0100
---- /tmp/suckless-build1.WjXxvas/p2/slock/config.h	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/slock/config.h /tmp/suckless-build1.Zo5MHGS/p2/slock/config.h
+*** /tmp/suckless-build1.Zo5MHGS/p1/slock/config.h	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build1.Zo5MHGS/p2/slock/config.h	2020-06-18 20:58:39.000000000 +0200
 ***************
 *** 0 ****
 --- 1,17 ----

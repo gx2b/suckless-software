@@ -82,6 +82,11 @@
  */
 #define AWESOMEBAR_PATCH 0
 
+/* Allows the bar height to be explicitly set rather than being derived from font.
+ * https://dwm.suckless.org/patches/bar_height/
+ */
+#define BAR_HEIGHT_PATCH 0
+
 /* This patch adds vertical and horizontal space between the statusbar and the edge of the screen.
  * https://dwm.suckless.org/patches/barpadding/
  */
@@ -218,6 +223,17 @@
  * https://dwm.suckless.org/patches/float_border_color/
  */
 #define FLOAT_BORDER_COLOR_PATCH 0
+
+/* This patch adds a float rule allowing the size and position of floating windows to be specified
+ * It also allows the size and position of floating windows to be controlled similar to the
+ * exresize, moveresize, and moveplace patches.
+ * The size and position can be specified using absolute, relative or fixed co-ordinates and
+ * https://github.com/bakkeby/patches/wiki/floatpos/
+ */
+#define FLOATPOS_PATCH 0
+
+/* Add-on functionality for the above: make the float positions respect outer (vanity)gaps. */
+#define FLOATPOS_RESPECT_GAPS_PATCH 0
 
 /* This patch provides the ability to focus the tag on the immediate left or right of the
  * currently focused tag. It also allows to send the focused window either on the left or
@@ -434,6 +450,12 @@
  */
 #define RESIZECORNERS_PATCH 0
 
+/* Practically the same as resizecorners, but the cursor does not warp to corners.
+ * This takes precedence over the resizecorners patch.
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-resizepoint-6.2.diff
+ */
+#define RESIZEPOINT_PATCH 0
+
 /* Adds a keyboard shortcut to restart dwm or alternatively by using kill -HUP dwmpid.
  * Additionally dwm can quit cleanly by using kill -TERM dwmpid.
  * https://dwm.suckless.org/patches/restartsig/
@@ -484,6 +506,11 @@
  * https://dwm.suckless.org/patches/selfrestart/
  */
 #define SELFRESTART_PATCH 0
+
+/* This patch allow clients to keep focus when being sent to another monitor.
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-sendmon_keepfocus-6.2.diff
+ */
+#define SENDMON_KEEPFOCUS_PATCH 0
 
 /* This patch allows border pixels to be changed during runtime.
  * https://dwm.suckless.org/patches/setborderpx/
@@ -567,7 +594,6 @@
 #define STATUSALLMONS_PATCH 1
 
 /* This patch adds a clickable button to the left hand side of the statusbar.
- * This patch is incompatible with the leftlayout patch which will take precedence.
  * https://dwm.suckless.org/patches/statusbutton/
  */
 #define STATUSBUTTON_PATCH 1

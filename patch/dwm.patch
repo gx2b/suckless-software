@@ -1,9 +1,9 @@
-diff -Ncr /tmp/suckless-build1.WjXxvas/p1/dwm/config.h /tmp/suckless-build1.WjXxvas/p2/dwm/config.h
-*** /tmp/suckless-build1.WjXxvas/p1/dwm/config.h	1970-01-01 01:00:00.000000000 +0100
---- /tmp/suckless-build1.WjXxvas/p2/dwm/config.h	2020-06-21 14:54:21.000000000 +0200
+diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/dwm/config.h /tmp/suckless-build1.Zo5MHGS/p2/dwm/config.h
+*** /tmp/suckless-build1.Zo5MHGS/p1/dwm/config.h	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build1.Zo5MHGS/p2/dwm/config.h	2020-06-28 21:20:56.000000000 +0200
 ***************
 *** 0 ****
---- 1,437 ----
+--- 1,463 ----
 + /* See LICENSE file for copyright and license details. */
 + 
 + /* appearance */
@@ -16,6 +16,7 @@ diff -Ncr /tmp/suckless-build1.WjXxvas/p1/dwm/config.h /tmp/suckless-build1.WjXx
 + static const int smartgaps               = 0;   /* 1 means no outer gap when there is only one window */
 + static const int showbar                 = 1;   /* 0 means no bar */
 + static const int topbar                  = 1;   /* 0 means bottom bar */
++ static const char buttonbar[]            = "📪";
 + static const int vertpad                 = 4;  /* vertical padding of bar */
 + static const int sidepad                 = 16;  /* horizontal padding of bar */
 + static const int horizpadbar             = 2;   /* horizontal padding for statusbar */
@@ -115,8 +116,29 @@ diff -Ncr /tmp/suckless-build1.WjXxvas/p1/dwm/config.h /tmp/suckless-build1.WjXx
 + 
 + static const MonitorRule monrules[] = {
 +     /* monitor  tag   layout  mfact  nmaster  showbar  topbar */
-+     {  1,       -1,   0,      -1,    -1,      -1,      -1     }, // use a different layout for the second monitor
-+     {  -1,      -1,   0,      -1,    -1,      -1,      -1     }, // default
++ //    {  -1,      -1,   0,      -1,    -1,      -1,      -1     }, // default
++ //    {   1,      -1,   0,      -1,    -1,      -1,      -1     }, // use a different layout for the second monitor
++     {   0,       1,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#1 : default
++     {   0,       2,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#2 : default
++     {   0,       3,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#3 : default
++     {   0,       4,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#4 : default
++     {   0,       5,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#5 : default
++     {   0,       6,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#6 : default
++     {   0,       7,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#7 : default
++     {   0,       8,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#8 : default
++     {   0,       9,   0,      -1,    -1,      -1,      -1     }, // mon#0 tag#9 : default
++     {   0,       0,   9,      -1,    -1,      -1,      -1     }, // mon#0 tag#0 : grid layout (#9) - nice for winview
++ 
++     {   1,       1,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#1 : default
++     {   1,       2,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#2 : default
++     {   1,       3,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#3 : default
++     {   1,       4,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#4 : default
++     {   1,       5,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#5 : default
++     {   1,       6,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#6 : default
++     {   1,       7,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#7 : default
++     {   1,       8,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#8 : default
++     {   1,       9,   0,      -1,    -1,      -1,      -1     }, // mon#1 tag#9 : default
++     {   1,       0,   9,      -1,    -1,      -1,      -1     }, // mon#1 tag#0 : grid layout (#9) - nice for winview
 + };
 + 
 + /* signal definitions */
@@ -412,6 +434,10 @@ diff -Ncr /tmp/suckless-build1.WjXxvas/p1/dwm/config.h /tmp/suckless-build1.WjXx
 + /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 + static Button buttons[] = {
 +     /* click                event mask           button          function        argument */
++ 	{ ClkButton,		0,		Button1,	spawn,		SHCMD("dmenuunicode") },
++ 	{ ClkButton,		0,		Button2,	spawn,		{.v = dmenucmd } },
++ 	{ ClkButton,		0,		Button3,	spawn,		{.v = dmenucmd } },
++ 
 +     { ClkWinTitle,          0,                   Button2,        zoom,           {0} },
 + 
 +     { ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
@@ -441,9 +467,9 @@ diff -Ncr /tmp/suckless-build1.WjXxvas/p1/dwm/config.h /tmp/suckless-build1.WjXx
 + 
 +     { ClkRootWin,           0,                   Button2,        togglebar,      {0} },
 + };
-diff -Ncr /tmp/suckless-build1.WjXxvas/p1/dwm/config.mk /tmp/suckless-build1.WjXxvas/p2/dwm/config.mk
-*** /tmp/suckless-build1.WjXxvas/p1/dwm/config.mk	2020-06-21 14:54:41.594390320 +0200
---- /tmp/suckless-build1.WjXxvas/p2/dwm/config.mk	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/dwm/config.mk /tmp/suckless-build1.Zo5MHGS/p2/dwm/config.mk
+*** /tmp/suckless-build1.Zo5MHGS/p1/dwm/config.mk	2020-06-28 21:25:20.147547850 +0200
+--- /tmp/suckless-build1.Zo5MHGS/p2/dwm/config.mk	2020-06-18 20:58:39.000000000 +0200
 ***************
 *** 26,44 ****
   # Uncomment this for the mdpcontrol patch / MDPCONTROL_PATCH
@@ -482,9 +508,23 @@ diff -Ncr /tmp/suckless-build1.WjXxvas/p1/dwm/config.mk /tmp/suckless-build1.WjX
   
   # flags
   CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
-diff -Ncr /tmp/suckless-build1.WjXxvas/p1/dwm/Makefile /tmp/suckless-build1.WjXxvas/p2/dwm/Makefile
-*** /tmp/suckless-build1.WjXxvas/p1/dwm/Makefile	2020-06-21 14:54:43.084390311 +0200
---- /tmp/suckless-build1.WjXxvas/p2/dwm/Makefile	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/dwm/.gitignore /tmp/suckless-build1.Zo5MHGS/p2/dwm/.gitignore
+*** /tmp/suckless-build1.Zo5MHGS/p1/dwm/.gitignore	2020-06-28 21:25:20.147547850 +0200
+--- /tmp/suckless-build1.Zo5MHGS/p2/dwm/.gitignore	2020-06-21 15:06:02.000000000 +0200
+***************
+*** 1,4 ****
+  *.o
+! dwm
+! config.h
+! patches.h
+--- 1,4 ----
+  *.o
+! *.class
+! *.orig
+! *.rej
+diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/dwm/Makefile /tmp/suckless-build1.Zo5MHGS/p2/dwm/Makefile
+*** /tmp/suckless-build1.Zo5MHGS/p1/dwm/Makefile	2020-06-28 21:25:20.414214515 +0200
+--- /tmp/suckless-build1.Zo5MHGS/p2/dwm/Makefile	2020-06-18 20:58:39.000000000 +0200
 ***************
 *** 17,26 ****
   .c.o:
