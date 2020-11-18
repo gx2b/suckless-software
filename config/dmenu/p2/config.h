@@ -26,16 +26,21 @@ static const char *colors[][2] =
 	[SchemeOut]  = { "#000000", "#00ffff" },
 	[SchemeSelHighlight]  = { "#ffc978", "#005577" },
 	[SchemeNormHighlight] = { "#ffc978", "#222222" },
+	[SchemeHp]   = { "#bbbbbb", "#333333" },
 };
 /* -l option; if nonzero, dmenu uses vertical list with given number of lines */
 static unsigned int lines      = 0;
+/* -g option; if nonzero, dmenu uses a grid comprised of columns and lines */
+static unsigned int columns    = 0;
 static unsigned int lineheight = 0;         /* -h option; minimum height of a menu line     */
 
 /*
  * Characters not considered part of a word while deleting words
  * for example: " /?\"&[]"
  */
+static const char startpipe[] = "#";
 static const char worddelimiters[] = " ";
 
 /* Size of the window border */
 static unsigned int border_width = 0;
+

@@ -1,9 +1,9 @@
-diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/dmenu/config.h /tmp/suckless-build1.Zo5MHGS/p2/dmenu/config.h
-*** /tmp/suckless-build1.Zo5MHGS/p1/dmenu/config.h	1970-01-01 01:00:00.000000000 +0100
---- /tmp/suckless-build1.Zo5MHGS/p2/dmenu/config.h	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.OXjeSQ2/p1/dmenu/config.h /tmp/suckless-build1.OXjeSQ2/p2/dmenu/config.h
+*** /tmp/suckless-build1.OXjeSQ2/p1/dmenu/config.h	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build1.OXjeSQ2/p2/dmenu/config.h	2020-11-18 23:54:05.000000000 +0100
 ***************
 *** 0 ****
---- 1,41 ----
+--- 1,46 ----
 + /* See LICENSE file for copyright and license details. */
 + /* Default settings; can be overriden by command line. */
 + 
@@ -32,16 +32,21 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/dmenu/config.h /tmp/suckless-build1.Zo
 + 	[SchemeOut]  = { "#000000", "#00ffff" },
 + 	[SchemeSelHighlight]  = { "#ffc978", "#005577" },
 + 	[SchemeNormHighlight] = { "#ffc978", "#222222" },
++ 	[SchemeHp]   = { "#bbbbbb", "#333333" },
 + };
 + /* -l option; if nonzero, dmenu uses vertical list with given number of lines */
 + static unsigned int lines      = 0;
++ /* -g option; if nonzero, dmenu uses a grid comprised of columns and lines */
++ static unsigned int columns    = 0;
 + static unsigned int lineheight = 0;         /* -h option; minimum height of a menu line     */
 + 
 + /*
 +  * Characters not considered part of a word while deleting words
 +  * for example: " /?\"&[]"
 +  */
++ static const char startpipe[] = "#";
 + static const char worddelimiters[] = " ";
 + 
 + /* Size of the window border */
 + static unsigned int border_width = 0;
++ 
