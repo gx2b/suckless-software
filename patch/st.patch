@@ -1,6 +1,6 @@
-diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/config.h /tmp/suckless-build1.Zo5MHGS/p2/st/config.h
-*** /tmp/suckless-build1.Zo5MHGS/p1/st/config.h	1970-01-01 01:00:00.000000000 +0100
---- /tmp/suckless-build1.Zo5MHGS/p2/st/config.h	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.yTrZvbA/p1/st/config.h /tmp/suckless-build1.yTrZvbA/p2/st/config.h
+*** /tmp/suckless-build1.yTrZvbA/p1/st/config.h	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build1.yTrZvbA/p2/st/config.h	2020-11-21 01:29:00.000000000 +0100
 ***************
 *** 0 ****
 --- 1,570 ----
@@ -238,7 +238,7 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/config.h /tmp/suckless-build1.Zo5MH
 +  */
 + static MouseShortcut mshortcuts[] = {
 + 	/* mask                 button   function        argument       release */
-+ 	{ XK_ANY_MOD,           Button2, clippaste,      {.i = 0},      1 },
++ 	{ XK_ANY_MOD,           Button2, selpaste,      {.i = 0},      1 },
 + 	{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
 + 	{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
 + 	{ MODKEY,               Button4, kscrollup,      {.i = -1} },
@@ -251,7 +251,7 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/config.h /tmp/suckless-build1.Zo5MH
 + 
 + static MouseShortcut maltshortcuts[] = {
 + 	/* mask                 button   function        argument       release */
-+ 	{ XK_ANY_MOD,           Button2, clippaste,      {.i = 0},      1 },
++ 	{ XK_ANY_MOD,           Button2, selpaste,      {.i = 0},      1 },
 + 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 + 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
 + };
@@ -276,7 +276,7 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/config.h /tmp/suckless-build1.Zo5MH
 + 	{ MODKEY,               XK_c,           clipcopy,       {.i =  0} },
 + 	{ ShiftMask,            XK_Insert,      clippaste,      {.i =  0} },
 + 	{ MODKEY,               XK_v,           clippaste,      {.i =  0} },
-+ 	{ XK_ANY_MOD,		    Button2,	    selpaste,   	{.i =  0} },
++ //	{ XK_ANY_MOD,		    Button2,	    selpaste,   	{.i =  0} },
 + 	{ ShiftMask,            XK_Page_Up,     kscrollup,       {.i = -1} },
 + 	{ ShiftMask,            XK_Page_Down,   kscrolldown,     {.i = -1} },
 + 	{ TERMMOD,              XK_Num_Lock,    numlock,         {.i =  0} },
@@ -574,9 +574,9 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/config.h /tmp/suckless-build1.Zo5MH
 +  * current selection and with cwd set to the cwd of the active shell
 +  */
 + static char *plumb_cmd = "plumb";
-diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/config.mk /tmp/suckless-build1.Zo5MHGS/p2/st/config.mk
-*** /tmp/suckless-build1.Zo5MHGS/p1/st/config.mk	2020-06-28 21:25:20.890881178 +0200
---- /tmp/suckless-build1.Zo5MHGS/p2/st/config.mk	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.yTrZvbA/p1/st/config.mk /tmp/suckless-build1.yTrZvbA/p2/st/config.mk
+*** /tmp/suckless-build1.yTrZvbA/p1/st/config.mk	2021-01-24 23:02:21.008804498 +0100
+--- /tmp/suckless-build1.yTrZvbA/p2/st/config.mk	2020-10-21 21:35:00.000000000 +0200
 ***************
 *** 13,19 ****
   PKG_CONFIG = pkg-config
@@ -594,9 +594,9 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/config.mk /tmp/suckless-build1.Zo5M
   
   # Uncomment this for the themed cursor patch / THEMED_CURSOR_PATCH
   #XCURSOR = -lXcursor
-diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/Makefile /tmp/suckless-build1.Zo5MHGS/p2/st/Makefile
-*** /tmp/suckless-build1.Zo5MHGS/p1/st/Makefile	2020-06-28 21:25:20.970881178 +0200
---- /tmp/suckless-build1.Zo5MHGS/p2/st/Makefile	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.yTrZvbA/p1/st/Makefile /tmp/suckless-build1.yTrZvbA/p2/st/Makefile
+*** /tmp/suckless-build1.yTrZvbA/p1/st/Makefile	2021-01-24 23:02:21.118805170 +0100
+--- /tmp/suckless-build1.yTrZvbA/p2/st/Makefile	2020-10-21 21:35:00.000000000 +0200
 ***************
 *** 49,55 ****
 --- 49,60 ----
@@ -623,9 +623,9 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/Makefile /tmp/suckless-build1.Zo5MH
   	rm -f $(DESTDIR)$(MANPREFIX)/man1/st.1
   
   .PHONY: all options clean dist install uninstall
-diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/patch/externalpipe.c /tmp/suckless-build1.Zo5MHGS/p2/st/patch/externalpipe.c
-*** /tmp/suckless-build1.Zo5MHGS/p1/st/patch/externalpipe.c	2020-06-28 21:25:20.907547845 +0200
---- /tmp/suckless-build1.Zo5MHGS/p2/st/patch/externalpipe.c	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.yTrZvbA/p1/st/patch/externalpipe.c /tmp/suckless-build1.yTrZvbA/p2/st/patch/externalpipe.c
+*** /tmp/suckless-build1.yTrZvbA/p1/st/patch/externalpipe.c	2021-01-24 23:02:21.035471327 +0100
+--- /tmp/suckless-build1.yTrZvbA/p2/st/patch/externalpipe.c	2020-10-21 21:35:00.000000000 +0200
 ***************
 *** 1,3 ****
 --- 1,17 ----
@@ -691,9 +691,9 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/patch/externalpipe.c /tmp/suckless-
   }
 - 
 --- 67,69 ----
-diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/patch/scrollback.h /tmp/suckless-build1.Zo5MHGS/p2/st/patch/scrollback.h
-*** /tmp/suckless-build1.Zo5MHGS/p1/st/patch/scrollback.h	2020-06-28 21:25:20.907547845 +0200
---- /tmp/suckless-build1.Zo5MHGS/p2/st/patch/scrollback.h	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.yTrZvbA/p1/st/patch/scrollback.h /tmp/suckless-build1.yTrZvbA/p2/st/patch/scrollback.h
+*** /tmp/suckless-build1.yTrZvbA/p1/st/patch/scrollback.h	2021-01-24 23:02:21.035471327 +0100
+--- /tmp/suckless-build1.yTrZvbA/p2/st/patch/scrollback.h	2020-10-21 21:35:00.000000000 +0200
 ***************
 *** 2,7 ****
 --- 2,9 ----
@@ -705,9 +705,9 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/patch/scrollback.h /tmp/suckless-bu
   void kscrolldown(const Arg *);
   void kscrollup(const Arg *);
   
-diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/st-copyout /tmp/suckless-build1.Zo5MHGS/p2/st/st-copyout
-*** /tmp/suckless-build1.Zo5MHGS/p1/st/st-copyout	1970-01-01 01:00:00.000000000 +0100
---- /tmp/suckless-build1.Zo5MHGS/p2/st/st-copyout	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.yTrZvbA/p1/st/st-copyout /tmp/suckless-build1.yTrZvbA/p2/st/st-copyout
+*** /tmp/suckless-build1.yTrZvbA/p1/st/st-copyout	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build1.yTrZvbA/p2/st/st-copyout	2020-10-21 21:35:00.000000000 +0200
 ***************
 *** 0 ****
 --- 1,13 ----
@@ -724,9 +724,9 @@ diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/st-copyout /tmp/suckless-build1.Zo5
 + chosen="$(grep -F "$ps1" "$tmpfile" | sed '$ d' | tac | dmenu -p "Copy which command's output?" -i -l 10 | sed 's/[^^]/[&]/g; s/\^/\\^/g')"
 + eps1="$(echo "$ps1" | sed 's/[^^]/[&]/g; s/\^/\\^/g')"
 + awk "/^$chosen$/{p=1;print;next} p&&/$eps1/{p=0};p" "$tmpfile" | xclip -selection clipboard
-diff -Ncr /tmp/suckless-build1.Zo5MHGS/p1/st/st-urlhandler /tmp/suckless-build1.Zo5MHGS/p2/st/st-urlhandler
-*** /tmp/suckless-build1.Zo5MHGS/p1/st/st-urlhandler	1970-01-01 01:00:00.000000000 +0100
---- /tmp/suckless-build1.Zo5MHGS/p2/st/st-urlhandler	2020-06-18 20:58:39.000000000 +0200
+diff -Ncr /tmp/suckless-build1.yTrZvbA/p1/st/st-urlhandler /tmp/suckless-build1.yTrZvbA/p2/st/st-urlhandler
+*** /tmp/suckless-build1.yTrZvbA/p1/st/st-urlhandler	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build1.yTrZvbA/p2/st/st-urlhandler	2020-10-21 21:35:00.000000000 +0200
 ***************
 *** 0 ****
 --- 1,15 ----

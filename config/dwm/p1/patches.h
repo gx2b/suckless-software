@@ -42,6 +42,15 @@
  */
 #define BAR_FLEXWINTITLE_PATCH 0
 
+/* This patch adds a context menu for layout switching.
+ *   - xmenu needs to be installed.
+ *   - Edit layoutmenu.sh with the installed layouts and with correct indexes.
+ *   - Place layoutmenu.sh in PATH.
+ *   - The text of the menu items is for display only. Name them however you want.
+ * https://dwm.suckless.org/patches/layoutmenu/
+ */
+#define BAR_LAYOUTMENU_PATCH 1
+
 /* Show layout symbol in bar */
 #define BAR_LTSYMBOL_PATCH 1
 
@@ -408,7 +417,7 @@
  * respective stack in tiled layout.
  * https://dwm.suckless.org/patches/cfacts/
  */
-#define CFACTS_PATCH 0
+#define CFACTS_PATCH 1
 
 /* This patch allows color attributes to be set through the command line.
  * https://dwm.suckless.org/patches/cmdcustomize/
@@ -445,7 +454,7 @@
 /* Similarly to the dragmfact patch this allows you to click and drag clients to change the
  * cfact to adjust the client's size in the stack. This patch depends on the cfacts patch.
  */
-#define DRAGCFACT_PATCH 0
+#define DRAGCFACT_PATCH 1
 
 /* This patch lets you resize the split in the tile layout (i.e. modify mfact) by holding
  * the modkey and dragging the mouse.
@@ -532,7 +541,7 @@
  * the urgency bit on the named window. This patch activates the window instead.
  * https://dwm.suckless.org/patches/focusonnetactive/
  */
-#define FOCUSONNETACTIVE_PATCH 0
+#define FOCUSONNETACTIVE_PATCH 1
 
 /* Send "fake signals" to dwm for handling, using xsetroot. This will not conflict with the
  * status bar, which also is managed using xsetroot.
@@ -559,7 +568,7 @@
  */
 #define INSETS_PATCH 0
 
-/* This patch (v1.5.5) implements inter-process communication through a UNIX socket for dwm. This
+/* This patch (v1.5.7) implements inter-process communication through a UNIX socket for dwm. This
  * allows for the window manager to be queried for information, e.g. listen for events such as tag
  * or layout changes, as well as send commands to control the window manager via other programs.
  *
@@ -644,6 +653,12 @@
  */
 #define MOVESTACK_PATCH 1
 
+/* Adds support for the _NET_CLIENT_LIST_STACKING atom, needed by certain applications like the
+ * Zoom video conferencing application.
+ * https://github.com/bakkeby/patches/wiki/netclientliststacking/
+ */
+#define NET_CLIENT_LIST_STACKING_PATCH 0
+
 /* Removes the border when there is only one window visible.
  * https://dwm.suckless.org/patches/noborder/
  */
@@ -684,7 +699,7 @@
  * https://github.com/instantOS/instantWM/
  * https://github.com/bakkeby/dwm-flexipatch/issues/51
  */
-#define ON_EMPTY_KEYS_PATCH 1
+#define ON_EMPTY_KEYS_PATCH 0
 
 /* Minor patch that prevents more than one rule being matched for a given client. */
 #define ONLY_ONE_RULE_MATCH_PATCH 0
@@ -705,6 +720,11 @@
  * tag basis, or leave it as one bar per monitor.
  */
 #define PERTAGBAR_PATCH 1
+
+/* This patch lets you change the position of a client in the stack using the mouse.
+ * https://github.com/bakkeby/patches/wiki/placemouse
+ */
+#define PLACEMOUSE_PATCH 1
 
 /* This patch provides a way to move clients up and down inside the client list.
  * https://dwm.suckless.org/patches/push/
@@ -882,6 +902,15 @@
  * Clients marked with isterminal in config.h swallow a window opened by any child process,
  * e.g. running xclock in a terminal. Closing the xclock window restores the terminal window
  * in the current position.
+ *
+ * This patch depends on the following additional libraries:
+ *    - libxcb
+ *    - Xlib-libxcb
+ *    - xcb-res
+ *
+ * You need to uncomment the corresponding line in config.mk to use the above libraries when
+ * including this patch.
+ *
  * https://dwm.suckless.org/patches/swallow/
  */
 #define SWALLOW_PATCH 1
@@ -889,10 +918,6 @@
 /* This patch depends on the pertag patch and makes it possible to switch focus with a single
  * shortcut (MOD+s) instead of having to think if you should use mod-j or mod-k for reaching
  * the previously used window.
- * This patch depends on the following additional libraries:
- *    - libxcb
- *    - Xlib-libxcb
- *    - xcb-res
  * https://dwm.suckless.org/patches/swapfocus/
  */
 #define SWAPFOCUS_PATCH 1

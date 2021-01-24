@@ -2,12 +2,12 @@
 
 /* appearance */
 static const unsigned int borderpx       = 2;   /* border pixel of windows */
-static const unsigned int snap           = 32;  /* snap pixel */
+static const unsigned int snap           = 8;  /* snap pixel, def=32 */
 static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
-static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
+static const unsigned int gappih         = 10;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 10;  /* vert inner gap between windows */
 static const unsigned int gappoh         = 10;  /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov         = 30;  /* vert outer gap between windows and screen edge */
+static const unsigned int gappov         = 10;  /* vert outer gap between windows and screen edge */
 static const int smartgaps               = 0;   /* 1 means no outer gap when there is only one window */
 static const char autostartblocksh[]     = "autostart_blocking.sh";
 static const char autostartsh[]          = "autostart.sh";
@@ -15,13 +15,12 @@ static const char dwmdir[]               = "dwm";
 static const char localshare[]           = ".local/share";
 static const int showbar                 = 1;   /* 0 means no bar */
 static const int topbar                  = 1;   /* 0 means bottom bar */
-static const char buttonbar[]            = "📪";
+static const char buttonbar[]            = "≋";
 /* Indicators: see patch/bar_indicators.h for options */
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
+static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
 static const char font[]                 = "monospace 12";
-//static const char dmenufont[]            = "monospace:size=10";
-//static const char font[]               = { "monospace:size=12", "JoyPixels:pixelsize=18:antialias=true:autohint=true" };
 static char dmenufont[]                  = "monospace:size=12";
 
 static char normfgcolor[]                = "#bbbbbb";
@@ -30,9 +29,9 @@ static char normbordercolor[]            = "#444444";
 static char normfloatcolor[]             = "#db8fd9";
 
 static char selfgcolor[]                 = "#eeeeee";
-static char selbgcolor[]                 = "#005577";
-static char selbordercolor[]             = "#005577";
-static char selfloatcolor[]              = "#005577";
+static char selbgcolor[]                 = "#4d4d4d";
+static char selbordercolor[]             = "#4d4d4d";
+static char selfloatcolor[]              = "#4d4d4d";
 
 static char titlenormfgcolor[]           = "#bbbbbb";
 static char titlenormbgcolor[]           = "#222222";
@@ -40,9 +39,9 @@ static char titlenormbordercolor[]       = "#444444";
 static char titlenormfloatcolor[]        = "#db8fd9";
 
 static char titleselfgcolor[]            = "#eeeeee";
-static char titleselbgcolor[]            = "#005577";
-static char titleselbordercolor[]        = "#005577";
-static char titleselfloatcolor[]         = "#005577";
+static char titleselbgcolor[]            = "#4d4d4d";
+static char titleselbordercolor[]        = "#4d4d4d";
+static char titleselfloatcolor[]         = "#4d4d4d";
 
 static char tagsnormfgcolor[]            = "#bbbbbb";
 static char tagsnormbgcolor[]            = "#222222";
@@ -50,13 +49,13 @@ static char tagsnormbordercolor[]        = "#444444";
 static char tagsnormfloatcolor[]         = "#db8fd9";
 
 static char tagsselfgcolor[]             = "#eeeeee";
-static char tagsselbgcolor[]             = "#005577";
-static char tagsselbordercolor[]         = "#005577";
-static char tagsselfloatcolor[]          = "#005577";
+static char tagsselbgcolor[]             = "#4d4d4d";
+static char tagsselbordercolor[]         = "#4d4d4d";
+static char tagsselfloatcolor[]          = "#4d4d4d";
 
-static char hidfgcolor[]                 = "#005577";
+static char hidfgcolor[]                 = "#4d4d4d";
 static char hidbgcolor[]                 = "#222222";
-static char hidbordercolor[]             = "#005577";
+static char hidbordercolor[]             = "#4d4d4d";
 static char hidfloatcolor[]              = "#f76e0c";
 
 static char urgfgcolor[]                 = "#bbbbbb";
@@ -79,6 +78,7 @@ static char *colors[][ColCount] = {
 };
 
 
+static const char *layoutmenu_cmd = "layoutmenu.sh";
 
 const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL };
 const char *spcmd2[] = {"st", "-n", "spfm", "-g", "200x60", "-e", "ranger", NULL };
@@ -223,31 +223,33 @@ static const BarRule barrules[] = {
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_stbutton,          draw_stbutton,          click_stbutton,          "statusbutton" },
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,              draw_tags,              click_tags,              "tags" },
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
-	{ -1,       0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_statuscmd,         "status" },
+	{  0,       0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_statuscmd,         "status" },
+//	{ -1,       0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_statuscmd,         "status" },
 	{ -1,       0,     BAR_ALIGN_NONE,   width_awesomebar,        draw_awesomebar,        click_awesomebar,        "awesomebar" },
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.6; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int nstack      = 0;    /* number of clients in primary stack area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
 
 static const Layout layouts[] = {
-	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis } */
+	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis, symbol func } */
 	{ "[]=",      flextile,         { -1, -1, -SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, // default tile layout
  	{ "><>",      NULL,             {0} },    /* no layout function means floating behavior */
-	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, 0, 0, NULL } }, // monocle
+	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, MONOCLE, 0, NULL } }, // monocle
 	{ "|||",      flextile,         { -1, -1, -SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, // columns (col) layout
 	{ ">M>",      flextile,         { -1, -1, FLOATING_MASTER, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, // floating master
 	{ "[D]",      flextile,         { -1, -1, -SPLIT_VERTICAL, TOP_TO_BOTTOM, MONOCLE, 0, NULL } }, // deck
 	{ "TTT",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, LEFT_TO_RIGHT, 0, NULL } }, // bstack
 	{ "===",      flextile,         { -1, -1, SPLIT_HORIZONTAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, // bstackhoriz
-	{ "|M|",      flextile,         { -1, -1, SPLIT_CENTERED_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, TOP_TO_BOTTOM, NULL } }, // centeredmaster
-	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID, 0, 0, NULL } }, // gappless grid
-	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE, 0, 0, NULL } }, // fibonacci dwindle
-	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL, 0, 0, NULL } }, // fibonacci spiral
+	{ "|M|",      flextile,         { -1, -1, SPLIT_CENTERED_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, TOP_TO_BOTTOM, NULL } }, // centeredmaster
+	{ "-M-",      flextile,         { -1, -1, SPLIT_CENTERED_HORIZONTAL, TOP_TO_BOTTOM, LEFT_TO_RIGHT, LEFT_TO_RIGHT, NULL } }, // centeredmaster horiz
+	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID, GAPPLESSGRID, 0, NULL } }, // gappless grid
+	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE, DWINDLE, 0, NULL } }, // fibonacci dwindle
+	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL, SPIRAL, 0, NULL } }, // fibonacci spiral
 	{ NULL,       NULL,             {0} },
 };
 
@@ -258,21 +260,8 @@ static const Layout layouts[] = {
     { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
     { MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
     { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
-	{ MODKEY|Mod1Mask,                     KEY,      tagnextmon,     {.ui = 1 << TAG} }, \
-	{ MODKEY|Mod1Mask|ShiftMask,           KEY,      tagprevmon,     {.ui = 1 << TAG} },
-
-/* key definitions */
-/*
-#define MODKEY Mod1Mask
-#define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
-	{ MODKEY|Mod4Mask,              KEY,      tagnextmon,     {.ui = 1 << TAG} }, \
-	{ MODKEY|Mod4Mask|ControlMask,  KEY,      tagprevmon,     {.ui = 1 << TAG} },
-
-*/
+	{ MODKEY|Mod1Mask,              KEY,      tagnextmon,     {.ui = 1 << TAG} }, \
+	{ MODKEY|Mod1Mask|ShiftMask,    KEY,      tagprevmon,     {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -297,11 +286,13 @@ static const char *instantswitchcmd[] = {"rofi", "-show", "window", "-show-icons
 //static const char *statuscmds[] = { "notify-send Mouse$BUTTON" };
 //static char *statuscmd[] = { "/bin/sh", "-c", NULL, NULL };
 
+/*
 static const char* firefoxcmd[] = {"firefox", NULL};
 static Key on_empty_keys[] = {
-	/* modifier key            function                argument */
+	// modifier key            function                argument
 	{ 0,        XK_f,          spawn,                  {.v = firefoxcmd } },
 };
+*/
 /*
 static Key keys[] = {
 	// modifier                     key            function                argument
@@ -319,6 +310,9 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
 	{ MODKEY,                       XK_h,          setmfact,               {.f = -0.05} },
 	{ MODKEY,                       XK_l,          setmfact,               {.f = +0.05} },
+	{ MODKEY|ShiftMask,             XK_h,          setcfact,               {.f = +0.25} },
+	{ MODKEY|ShiftMask,             XK_l,          setcfact,               {.f = -0.25} },
+	{ MODKEY|ShiftMask,             XK_o,          setcfact,               {0} },
 	{ MODKEY|Mod4Mask,              XK_Down,       moveresize,             {.v = "0x 25y 0w 0h" } },
 	{ MODKEY|Mod4Mask,              XK_Up,         moveresize,             {.v = "0x -25y 0w 0h" } },
 	{ MODKEY|Mod4Mask,              XK_Right,      moveresize,             {.v = "25x 0y 0w 0h" } },
@@ -347,6 +341,8 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_0,          togglegaps,             {0} },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,          defaultgaps,            {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
+	{ MODKEY|ShiftMask,             XK_Tab,        shiftview,              { .i = -1 } },
+	{ MODKEY|ShiftMask,             XK_backslash,  shiftview,              { .i = +1 } },
 	{ MODKEY|Mod4Mask,              XK_Tab,        shiftviewclients,       { .i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_backslash,  shiftviewclients,       { .i = +1 } },
 	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
@@ -411,6 +407,7 @@ static Key keys[] = {
     TAGKEYS(                        XK_7,                                  6)
     TAGKEYS(                        XK_8,                                  7)
     TAGKEYS(                        XK_9,                                  8)
+
     { Mod1Mask,                     XK_Tab,        spawn,                  {.v = instantswitchcmd } },
 	{ MODKEY,                       XK_0,          view,                   {.ui = ~SPTAGMASK } },
 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~SPTAGMASK } },
@@ -418,17 +415,18 @@ static Key keys[] = {
     { MODKEY,                       XK_F1,         spawn,                  SHCMD("dmenushortcut") },
     { MODKEY|ShiftMask,             XK_F1,         spawn,                  SHCMD("randman") },
     { MODKEY,                       XK_F2,         spawn,                  SHCMD("showman") },
-    { MODKEY|ShiftMask,             XK_F2,         quit,                   {0} },
+    { MODKEY|ShiftMask,             XK_F2,         quit,                   {1} },    // restart = sighup
+    { MODKEY|ControlMask|ShiftMask, XK_F2,         quit,                   {0} },    // quit = sigterm
     { MODKEY,                       XK_F3,         spawn,                  SHCMD("displayselect") },
     { MODKEY,                       XK_F5,         xrdb,                   {.v = NULL } },
 
     { MODKEY,                       XK_Tab,        view,                   {0} },
     //{ MODKEY,                       XK_grave,      spawn,                  SHCMD("dmenuunicode") },
 
-	  { MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
-	  { MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
-	  { MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
-    
+    { MODKEY,                       XK_grave,      togglescratch,          {.ui = 0 } },
+    { MODKEY|ControlMask,           XK_grave,      setscratch,             {.ui = 0 } },
+    { MODKEY|ShiftMask,             XK_grave,      removescratch,          {.ui = 0 } },
+
     { MODKEY|ShiftMask,             XK_BackSpace,  spawn,                  SHCMD("sysact") },
     { MODKEY,                       XK_Insert,     spawn,                  SHCMD("showclip") },
     { ShiftMask,                    XK_Print,      spawn,                  SHCMD("maimpick") },
@@ -469,8 +467,10 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_c,          togglescratch,          {.ui = 2 } },
     { MODKEY,                       XK_d,          spawn,                  {.v = dmenucmd } },
     { MODKEY|ShiftMask,             XK_d,          togglegaps,             {0} },
-    { MODKEY,                       XK_f,          fullscreen,             {0} },
+    { MODKEY,                       XK_f,          togglefullscreen,       {0} },
+    { MODKEY|ShiftMask,             XK_f,          fullscreen,             {0} },
     { MODKEY,                       XK_h,          setmfact,               {.f = +0.05} },
+	{ MODKEY|ShiftMask,             XK_h,          setcfact,               {.f = +0.25} },
     { MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
     { MODKEY|ShiftMask,             XK_i,          incnmaster,             {.i = -1 } },
     { MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
@@ -478,10 +478,12 @@ static Key keys[] = {
     { MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
     { MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
     { MODKEY,                       XK_l,          setmfact,               {.f = -0.05} },
+	{ MODKEY|ShiftMask,             XK_l,          setcfact,               {.f = -0.25} },
     //{ MODKEY,                       XK_m,          spawn,                  SHCMD("pamixer -t; pkill -RTMIN+10 dwmblocks") },
     { MODKEY,                       XK_m,          spawn,                  SHCMD("pulsemixer --toggle-mute ; kill -44 $(pidof dwmblocks)") },
     { MODKEY|ShiftMask,             XK_m,          spawn,                  SHCMD("st -e ncmpcpp") },
     { MODKEY,                       XK_o,          winview,                {0} },
+	{ MODKEY|ShiftMask,             XK_o,          setcfact,               {0} },
     { MODKEY,                       XK_p,          spawn,                  SHCMD("mpc toggle; kill -45 $(pidof dwmblocks)") },
     { MODKEY|ShiftMask,             XK_p,          spawn,                  SHCMD("mpc pause ; pauseallmpv") },
     { MODKEY|ShiftMask,             XK_q,          killclient,             {0} },
@@ -489,8 +491,9 @@ static Key keys[] = {
     { MODKEY,                       XK_s,          swapfocus,              {.i = -1 } },
     { MODKEY|ShiftMask,             XK_s,          togglesticky,           {0} },
     { MODKEY,                       XK_w,          spawn,                  SHCMD("$BROWSER") },
-    { MODKEY|ShiftMask,             XK_w,          spawn,                  SHCMD("chromium --force-device-scale-factor=2 --disable-field-trial-config") },
-    { MODKEY,                       XK_x,          spawn,                  SHCMD("slock & mpc pause ; pauseallmpv") },
+    //{ MODKEY|ShiftMask,             XK_w,          spawn,                  SHCMD("chromium --force-device-scale-factor=2 --disable-field-trial-config") },
+    { MODKEY|ShiftMask,             XK_w,          spawn,                  SHCMD("chromium --autoplay-policy=user-required --disable-field-trial-config") },
+    { MODKEY|ShiftMask,             XK_x,          spawn,                  SHCMD("slock & mpc pause ; pauseallmpv") },
     { MODKEY,                       XK_a,          spawn,                  SHCMD("instant") },
     { MODKEY,                       XK_z,          incrgaps,               {.i = +1 } },
     { MODKEY|ShiftMask,             XK_z,          incrgaps,               {.i = -1 } },
@@ -589,8 +592,15 @@ static Button buttons[] = {
 	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = statuscmd } },
 	{ ClkStatusText,        0,                   Button3,        spawn,          {.v = statuscmd } },
 	{ ClkClientWin,         MODKEY,              Button1,        movemouse,      {0} },
+	// placemouse options, choose which feels more natural:
+	//    0 - tiled position is relative to mouse cursor
+	//    1 - tiled postiion is relative to window center
+	//    2 - mouse pointer warps to window center
+	//
+	{ ClkClientWin,         MODKEY|ControlMask,  Button1,        placemouse,     {.i = 1} },
 	{ ClkClientWin,         MODKEY,              Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },
+	{ ClkClientWin,         MODKEY|ShiftMask,    Button3,        dragcfact,      {0} },
 	{ ClkTagBar,            0,                   Button1,        view,           {0} },
 	{ ClkTagBar,            0,                   Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,              Button1,        tag,            {0} },
@@ -601,16 +611,17 @@ static Button buttons[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
     /* click                event mask           button          function        argument */
-  	{ ClkButton,        		0,	              	 Button1,	       spawn,		       SHCMD("xmenu.sh") },
-  	{ ClkButton,        		0,	              	 Button2,	       spawn,		       SHCMD("dmenuunicode") },
-	  { ClkButton,		        0,		               Button3,	       spawn,		       {.v = dmenucmd } },
+  	{ ClkButton,        	0,	              	 Button1,	     spawn,		     SHCMD("xmenu.sh") },
+  	{ ClkButton,        	0,	              	 Button2,	     spawn,		     SHCMD("dmenuunicode") },
+    { ClkButton,		    0,		             Button3,	     spawn,		     {.v = dmenucmd } },
 
-	  { ClkWinTitle,          0,                   Button1,        togglewin,      {0} },
+	{ ClkWinTitle,          0,                   Button1,        togglewin,      {0} },
     { ClkWinTitle,          0,                   Button2,        zoom,           {0} },
-	  { ClkWinTitle,          0,                   Button3,        showhideclient, {0} },
+    { ClkWinTitle,          0,                   Button3,        showhideclient, {0} },
 
     { ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
-    { ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,          0,                   Button3,        layoutmenu,     {0} },
+    //{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
 
     { ClkStatusText,        0,                   Button1,        sigdwmblocks,   {.i = 1 } },
     { ClkStatusText,        0,                   Button2,        sigdwmblocks,   {.i = 2 } },
@@ -620,11 +631,13 @@ static Button buttons[] = {
     { ClkStatusText,        ShiftMask,           Button1,        sigdwmblocks,   {.i = 6 } },
 
     { ClkClientWin,         MODKEY,              Button1,        movemouse,      {0} },
+	{ ClkClientWin,         MODKEY|ControlMask,  Button1,        placemouse,     {.i = 1} },
+    { ClkClientWin,         MODKEY|Mod1Mask,     Button1,        tagmon,         {.i = +1} },
     { ClkClientWin,         MODKEY,              Button2,        togglefloating, {0} },
     { ClkClientWin,         MODKEY,              Button3,        resizemouse,    {0} },
+	{ ClkClientWin,         MODKEY|ShiftMask,    Button3,        dragcfact,      {0} },
     { ClkClientWin,         MODKEY,              Button4,        incrgaps,       {.i = +1} },
     { ClkClientWin,         MODKEY,              Button5,        incrgaps,       {.i = -1} },
-    { ClkClientWin,         MODKEY|Mod1Mask,     Button1,        tagmon,         {.i = +1} },
 //    { ClkClientWin,         MODKEY,              Button7,        tagmon,         {.i = -1} },
 
     { ClkTagBar,            0,                   Button1,        view,           {0} },
@@ -654,6 +667,7 @@ static Signal signals[] = {
 	{ "rotatelayoutaxis",        rotatelayoutaxis },
 	{ "setlayoutaxisex",         setlayoutaxisex },
 	{ "mirrorlayout",            mirrorlayout },
+	{ "setcfact",                setcfact },
 	{ "tagmon",                  tagmon },
 	{ "zoom",                    zoom },
 	{ "incrgaps",                incrgaps },
@@ -670,6 +684,7 @@ static Signal signals[] = {
 	{ "viewall",                 viewallex },
 	{ "viewex",                  viewex },
 	{ "toggleview",              toggleview },
+	{ "shiftview",               shiftview },
 	{ "shiftviewclients",        shiftviewclients },
 	{ "togglesticky",            togglesticky },
 	{ "cyclelayout",             cyclelayout },
@@ -693,4 +708,3 @@ static Signal signals[] = {
 	{ "setlayout",               setlayout },
 	{ "setlayoutex",             setlayoutex },
 };
-
