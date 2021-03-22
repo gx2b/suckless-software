@@ -1,6 +1,6 @@
-diff -Ncr /tmp/suckless-build1.8IDRdF6/p1/slock/config.h /tmp/suckless-build1.8IDRdF6/p2/slock/config.h
-*** /tmp/suckless-build1.8IDRdF6/p1/slock/config.h	1970-01-01 01:00:00.000000000 +0100
---- /tmp/suckless-build1.8IDRdF6/p2/slock/config.h	2020-10-21 21:35:00.000000000 +0200
+diff -Ncr /tmp/suckless-build1.Q87tBQs/p1/slock/config.h /tmp/suckless-build1.Q87tBQs/p2/slock/config.h
+*** /tmp/suckless-build1.Q87tBQs/p1/slock/config.h	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build1.Q87tBQs/p2/slock/config.h	2020-10-21 21:35:00.000000000 +0200
 ***************
 *** 0 ****
 --- 1,17 ----

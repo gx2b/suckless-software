@@ -477,8 +477,8 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_d,          togglegaps,             {0} },
 
 	{ MODKEY,                       XK_e,          rioresize,              {0} },
-	{ MODKEY|ControlMask,           XK_e,          riospawnsync,           {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_e,          riospawn,               {.v = termcmd } },
+	//{ MODKEY|ControlMask,           XK_e,          riospawnsync,           {.v = dmenucmd } },
+	//{ MODKEY|ShiftMask,             XK_e,          riospawn,               {.v = termcmd } },
 
     { MODKEY,                       XK_f,          togglefullscreen,       {0} },
     { MODKEY|ShiftMask,             XK_f,          fullscreen,             {0} },
