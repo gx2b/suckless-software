@@ -15,6 +15,10 @@ static const char dwmdir[]               = "dwm";
 static const char localshare[]           = ".local/share";
 static const int showbar                 = 1;   /* 0 means no bar */
 static const int topbar                  = 1;   /* 0 means bottom bar */
+static const char slopspawnstyle[]       = "-t 0 -c 0.92,0.85,0.69,0.3 -o"; /* do NOT define -f (format) here */
+static const char slopresizestyle[]      = "-t 0 -c 0.92,0.85,0.69,0.3"; /* do NOT define -f (format) here */
+static const int riodraw_borders         = 0;  /* 0 or 1, indicates whether the area drawn using slop includes the window borders */
+static const int riodraw_matchpid        = 1;  /* 0 or 1, indicates whether to match the PID of the client that was spawned with riospawn */
 static const char buttonbar[]            = "≋";
 /* Indicators: see patch/bar_indicators.h for options */
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
@@ -168,14 +172,17 @@ static const Rule rules[] = {
     //    WM_NAME(STRING) = title
     //    WM_WINDOW_ROLE(STRING) = role
     //
-    // class      role      instance    title      wtype  tags mask    isfloating   isterminal  noswallow  monitor
-    { "Gimp",     NULL,     NULL,       NULL,      NULL,   0,           1,           0,          0,         -1 },
-    { "Firefox",  NULL,     NULL,       NULL,      NULL,   1 << 8,      0,           0,          0,         -1 },
-    { "St",       NULL,     NULL,       NULL,      NULL,   0,           0,           1,          0,         -1 },
-    { NULL,       NULL,     NULL,  "Event Tester", NULL,   0,           0,           0,          1,         -1 },   // xev
-    { NULL,       NULL,     "spterm",   NULL,      NULL,   SPTAG(0),    1,           1,          0,         -1 },
-    { NULL,       NULL,     "spfm",     NULL,      NULL,   SPTAG(1),    1,           1,          0,         -1 },
-    { NULL,       NULL,     "spcalc",   NULL,      NULL,   SPTAG(2),    1,           1,          0,         -1 },
+    // class           role      instance    title          wtype  tags mask    isfloating   isterminal  noswallow  monitor
+    { "Gimp",          NULL,     NULL,       NULL,          NULL,   0,           1,           0,          0,         -1 },
+    { "firefox",       NULL,     NULL,       NULL,          NULL,   1 << 3,      0,           0,          0,         -1 },
+    { "Chromium",      NULL,     NULL,       NULL,          NULL,   1 << 3,      0,           0,          0,         -1 },
+    { "Brave-browser", NULL,     NULL,       NULL,          NULL,   1 << 0,      0,           0,          0,          0 },
+    { "St",            NULL,     NULL,       NULL,          NULL,   0,           0,           1,          0,         -1 },
+    { "St",            NULL,     NULL,      "float",        NULL,   0,           1,           1,          1,         -1 },
+    { NULL,            NULL,     NULL,      "Event Tester", NULL,   0,           0,           0,          1,         -1 },   // xev
+    { NULL,            NULL,     "spterm",   NULL,          NULL,   SPTAG(0),    1,           1,          0,         -1 },
+    { NULL,            NULL,     "spfm",     NULL,          NULL,   SPTAG(1),    1,           1,          0,         -1 },
+    { NULL,            NULL,     "spcalc",   NULL,          NULL,   SPTAG(2),    1,           1,          0,         -1 },
 };
 
 static const MonitorRule monrules[] = {
@@ -223,8 +230,7 @@ static const BarRule barrules[] = {
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_stbutton,          draw_stbutton,          click_stbutton,          "statusbutton" },
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,              draw_tags,              click_tags,              "tags" },
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
-	{  0,       0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_statuscmd,         "status" },
-//	{ -1,       0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_statuscmd,         "status" },
+	{ -1,       0,     BAR_ALIGN_RIGHT,  width_status,            draw_status,            click_statuscmd,         "status" },
 	{ -1,       0,     BAR_ALIGN_NONE,   width_awesomebar,        draw_awesomebar,        click_awesomebar,        "awesomebar" },
 };
 
@@ -250,6 +256,7 @@ static const Layout layouts[] = {
 	{ ":::",      flextile,         { -1, -1, NO_SPLIT, GAPPLESSGRID, GAPPLESSGRID, 0, NULL } }, // gappless grid
 	{ "[\\]",     flextile,         { -1, -1, NO_SPLIT, DWINDLE, DWINDLE, 0, NULL } }, // fibonacci dwindle
 	{ "(@)",      flextile,         { -1, -1, NO_SPLIT, SPIRAL, SPIRAL, 0, NULL } }, // fibonacci spiral
+	{ "[T]",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TATAMI, 0, NULL } }, // tatami mats
 	{ NULL,       NULL,             {0} },
 };
 
@@ -417,7 +424,8 @@ static Key keys[] = {
     { MODKEY,                       XK_F2,         spawn,                  SHCMD("showman") },
     { MODKEY|ShiftMask,             XK_F2,         quit,                   {1} },    // restart = sighup
     { MODKEY|ControlMask|ShiftMask, XK_F2,         quit,                   {0} },    // quit = sigterm
-    { MODKEY,                       XK_F3,         spawn,                  SHCMD("displayselect") },
+    //{ MODKEY,                       XK_F3,         spawn,                  SHCMD("displayselect") },
+    { MODKEY,                       XK_F3,         spawn,                  SHCMD("setbg 3") },
     { MODKEY,                       XK_F5,         xrdb,                   {.v = NULL } },
 
     { MODKEY,                       XK_Tab,        view,                   {0} },
@@ -467,6 +475,11 @@ static Key keys[] = {
     { MODKEY|ShiftMask,             XK_c,          togglescratch,          {.ui = 2 } },
     { MODKEY,                       XK_d,          spawn,                  {.v = dmenucmd } },
     { MODKEY|ShiftMask,             XK_d,          togglegaps,             {0} },
+
+	{ MODKEY,                       XK_e,          rioresize,              {0} },
+	{ MODKEY|ControlMask,           XK_e,          riospawnsync,           {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_e,          riospawn,               {.v = termcmd } },
+
     { MODKEY,                       XK_f,          togglefullscreen,       {0} },
     { MODKEY|ShiftMask,             XK_f,          fullscreen,             {0} },
     { MODKEY,                       XK_h,          setmfact,               {.f = +0.05} },

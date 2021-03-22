@@ -1,6 +1,6 @@
-diff -Ncr /tmp/suckless-build1.yTrZvbA/p1/dmenu/config.h /tmp/suckless-build1.yTrZvbA/p2/dmenu/config.h
-*** /tmp/suckless-build1.yTrZvbA/p1/dmenu/config.h	1970-01-01 01:00:00.000000000 +0100
---- /tmp/suckless-build1.yTrZvbA/p2/dmenu/config.h	2020-11-18 23:54:05.000000000 +0100
+diff -Ncr /tmp/suckless-build1.8IDRdF6/p1/dmenu/config.h /tmp/suckless-build1.8IDRdF6/p2/dmenu/config.h
+*** /tmp/suckless-build1.8IDRdF6/p1/dmenu/config.h	1970-01-01 01:00:00.000000000 +0100
+--- /tmp/suckless-build1.8IDRdF6/p2/dmenu/config.h	2020-11-18 23:54:05.000000000 +0100
 ***************
 *** 0 ****
 --- 1,46 ----

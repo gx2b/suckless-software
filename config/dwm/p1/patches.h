@@ -520,6 +520,11 @@
  */
 #define FOCUSADJACENTTAG_PATCH 0
 
+/* Allows focusing on clients based on direction (up, down, left, right) instead of client order.
+ * https://github.com/bakkeby/patches/wiki/focusdir/
+ */
+#define FOCUSDIR_PATCH 0
+
 /* A simple patch that just puts focus back to the master client.
  * https://dwm.suckless.org/patches/focusmaster/
  */
@@ -597,6 +602,12 @@
  * https://dwm.suckless.org/patches/killunsel/
  */
 #define KILLUNSEL_PATCH 0
+
+/* This changes the window manager name to LG3d instead of dwm as a workaround for Java
+ * applications that assume that the window manager is using window reparenting.
+ * Refer to the ISSUES secton of the dwm man page for more details.
+ */
+#define LG3D_PATCH 1
 
 /* By default in dwm it is possible to make an application fullscreen, then use
  * the focusstack keybindings to focus on other windows beneath the current window.
@@ -768,6 +779,13 @@
  * https://dwm.suckless.org/patches/restartsig/
  */
 #define RESTARTSIG_PATCH 1
+
+/* Adds rio-like drawing to resize the selected client.
+ * This depends on an external tool slop being installed.
+ * This patch was backported from instantWM.
+ * https://github.com/bakkeby/patches/blob/master/dwm/dwm-riodraw-6.2.diff
+ */
+#define RIODRAW_PATCH 1
 
 /* This patch let's you rotate through the stack using keyboard shortcuts.
  * https://dwm.suckless.org/patches/rotatestack/
@@ -950,6 +968,14 @@
  * Also see https://dwm.suckless.org/patches/switchtotag
  */
 #define SWITCHTAG_PATCH 0
+
+/* This patch transforms the monocle layout into a "tabbed" layout if more than one window is
+ * present on the monocle view. This patch has been added for demonstration purposes only and has
+ * limited compatibility with other patches. It will conflict space-wise with a second bar.
+ * Note that fancybar, awesomebar, bartabgroups and similar patches make the tab patch redundant.
+ * https://dwm.suckless.org/patches/tab/
+ */
+#define TAB_PATCH 0
 
 /* Adds keyboard shortcuts to move all (or only floating) windows from one tag to another.
  * https://dwm.suckless.org/patches/tagall/
